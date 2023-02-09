@@ -8,14 +8,15 @@ import { lastValueFrom } from 'rxjs';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent {
   
   // Deux variables devront être ajoutées ici
   result : boolean = false;
   artist : string = "";
-  album : string = "";
   chanson : string = "";
-  lesAlbum : albums[] = [];
+  chansons : string[] = [];
+  lesAlbums : Album[] = [];
 
   // Le constructeur devra être ajouté ici
   constructor(public http : HttpClient){}
@@ -25,18 +26,23 @@ export class AppComponent {
 	
 	// La requête HTTP devra être ajoutée ici
   // API key : 9a8a3facebbccaf363bb9fd68fa37abf
-  try{
     let x = await lastValueFrom(this.http.get<any>("http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=cher&api_key=9a8a3facebbccaf363bb9fd68fa37abf&format=json"))
     console.log(x);
+
+    this.lesAlbums = [];
+  
+  for(let monAlbum of x.topalbums.album)
+  {
+    let album = new Album;
+    album.nom = monAlbum.name;
+    album.image = monAlbum.image[1]["#text"];
+    this.lesAlbums.push(album);
   }
-  catch(e : any){
-    console.log("mon erreur : " + e.message);
+  
   }
 
-  this.lesAlbum = [];
-  
-
-  
+  async newSong():Promise<void>{
+    
   }
 
   newSearch():void{
@@ -44,8 +50,8 @@ export class AppComponent {
   }
 }
 
-class albums
+class Album
 {
-    image ?: string;
-    nom ?: string; 
+    nom : string = "";
+    image : string = "";
 }

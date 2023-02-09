@@ -19,8 +19,11 @@
         <div *ngIf="result">
 		  <!-- L'affichage des artistes similaires sera ici -->
       <ul>
-        <li *ngFor="let artist of artistAlbum">
-            {{artist}}
+        <li *ngFor="let album of lesAlbums">
+          <form (ngSubmit)="newSong()" *ngIf="result">
+            <img src="{{album.image}}">
+            {{album.nom}}
+          </form>
         </li>
       </ul>
 		    </div>
